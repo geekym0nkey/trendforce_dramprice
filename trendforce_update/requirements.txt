@@ -1,0 +1,7 @@
+selenium
+webdriver-manager
+requests
+csv
+time
+#pandas
+#beautifulsoup4
