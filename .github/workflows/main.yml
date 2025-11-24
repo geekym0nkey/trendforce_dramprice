@@ -32,3 +32,31 @@ jobs:
 
     - name: Run scraper
       run: python trendforce_update/main.py
+       # 7. Check for modified files (the CSV is saved in the repository root)
+    - name: Check for changes
+      id: git_status
+      run: |
+        # Check if the CSV file was created or modified
+        if [[ $(git status --porcelain=v1 | grep "dram_price_history_FULL.csv") ]]; then
+          echo "files_changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "files_changed=false" >> $GITHUB_OUTPUT
+        fi
+      # Note: Using $GITHUB_OUTPUT for compatibility with newer runner versions
+  
+    # 8. Configure Git user for committing
+    - name: Configure Git
+      if: steps.git_status.outputs.files_changed == 'true'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+  
+    # 9. CRUCIAL STEP: Commit and Push the updated CSV file
+    - name: Commit and Push CSV
+      if: steps.git_status.outputs.files_changed == 'true'
+      run: |
+        git add dram_price_history_FULL.csv
+        # Use the current run ID in the commit message
+        COMMIT_MESSAGE="Automated data update: DRAM prices (${{ github.run_number }})"
+        git commit -m "$COMMIT_MESSAGE"
+        git push
