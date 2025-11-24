@@ -120,16 +120,16 @@ def save_all_data_to_csv(data, filename):
 
 # --- Main Execution Loop ---
 if __name__ == "__main__":
-    while True:
-        data = get_dram_prices()
+    #while True: remove this while loop because I am going to run it on the github action
+    data = get_dram_prices()
 
-        if data and len(data) > 1:
+    if data and len(data) > 1:
             # Pass the full extracted data to the save function
-            save_all_data_to_csv(data, OUTPUT_FILENAME)
-        else:
-            print("Failed to retrieve valid data (or only header found). Skipping save operation.")
+        save_all_data_to_csv(data, OUTPUT_FILENAME)
+    else:
+        print("Failed to retrieve valid data (or only header found). Skipping save operation.")
 
-        print(f"\nFinished check. Waiting for {CHECK_INTERVAL_SECONDS // 3600} hours...")
+    print(f"\nFinished check. Waiting for {CHECK_INTERVAL_SECONDS // 3600} hours...")
 
         # Wait for the specified interval before checking again
-        time.sleep(CHECK_INTERVAL_SECONDS)
+       # time.sleep(CHECK_INTERVAL_SECONDS) ... remove this time.sleep function because we only need to set this in the yml file
