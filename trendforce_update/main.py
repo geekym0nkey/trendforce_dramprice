@@ -32,6 +32,10 @@ def get_dram_prices():
 
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Navigating to website...")
     driver.get(URL)
+    # Debug: print first 5000 chars of page source
+    print("\n===== PAGE SOURCE (first 5000 chars) =====")
+    print(driver.page_source[:5000])
+    print("===== END PAGE SOURCE =====\n")
 
     try:
         # 1. Wait until the main price table is visible
