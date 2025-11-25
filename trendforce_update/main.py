@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # --- Configuration ---
 URL = "https://www.trendforce.com.tw/price/dram/dram_spot"
 # Check every 4 hours (4 * 60 * 60 seconds). Adjust as needed.
-CHECK_INTERVAL_SECONDS = 1000
+#CHECK_INTERVAL_SECONDS = 1000  this is no longer useful on Github or other cloud servers
 OUTPUT_FILENAME = "dram_price_history_FULL.csv"
 
 
@@ -128,8 +128,8 @@ if __name__ == "__main__":
         save_all_data_to_csv(data, OUTPUT_FILENAME)
     else:
         print("Failed to retrieve valid data (or only header found). Skipping save operation.")
-
-    print(f"\nFinished check. Waiting for {CHECK_INTERVAL_SECONDS // 3600} hours...")
+    print(f"\nFinished check. Script terminating.")
+    #print(f"\nFinished check. Waiting for {CHECK_INTERVAL_SECONDS // 3600} hours...")  this is no longer useful on Github or other cloud servers
 
         # Wait for the specified interval before checking again
        # time.sleep(CHECK_INTERVAL_SECONDS) ... remove this time.sleep function because we only need to set this in the yml file
