@@ -121,6 +121,32 @@ def save_all_data_to_csv(data, filename):
     except Exception as e:
         print(f"ERROR saving data to CSV: {e}")
 
+# new feature.. use to compare the latest scraped data to the saved existing ones
+def load_last_saved_cols(filename):
+    """Returns the last 7 entries from the second-from-right column, or None if file doesn't exist."""
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            rows = list(csv.reader(f))
+
+        if len(rows) <= 1:
+            return None  # no data rows
+
+        # Transpose rows → columns
+        cols = list(map(list, zip(*rows)))
+
+        # Latest-price column = second-from-right
+        latest_price_col = cols[-2]
+
+        # Remove header (first entry)
+        latest_price_values = latest_price_col[1:]
+
+        # Return last 7 saved prices
+        return latest_price_values[-7:]
+
+    except FileNotFoundError:
+        return None
+
+
 
 # --- Main Execution Loop ---
 if __name__ == "__main__":
@@ -128,11 +154,19 @@ if __name__ == "__main__":
     data = get_dram_prices()
 
     if data and len(data) > 1:
-            # Pass the full extracted data to the save function
-        save_all_data_to_csv(data, OUTPUT_FILENAME)
+        last_saved = load_last_saved_cols(OUTPUT_FILENAME)
+        no_header_data = data[1:]
+        latest_scraped_prices = [row[-2] for row in no_header_data] # second column to the right 
+
+        if last_saved == latest_scraped_prices:
+            print("No price changes detected. Skipping save.")
+        else:
+            print("Price updated detected → saving new data.")
+            save_all_data_to_csv(data, OUTPUT_FILENAME)
+
     else:
         print("Failed to retrieve valid data (or only header found). Skipping save operation.")
-    print(f"\nFinished check. Script terminating.")
+
     #print(f"\nFinished check. Waiting for {CHECK_INTERVAL_SECONDS // 3600} hours...")  this is no longer useful on Github or other cloud servers
 
         # Wait for the specified interval before checking again
