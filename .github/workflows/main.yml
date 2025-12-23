@@ -1,9 +1,9 @@
 name: Run DRAM Scraper
 
-on:
-  schedule:
-    - cron: "0 6/4 * * *"  # ⏰ every 4 hours
-  workflow_dispatch:        # allow manual trigger
+#on:
+ # schedule:
+  #  - cron: "0 6/4 * * *"  # ⏰ every 4 hours
+  #workflow_dispatch:        # allow manual trigger
 
 jobs:
   run-scraper:
