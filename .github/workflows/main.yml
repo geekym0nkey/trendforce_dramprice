@@ -60,3 +60,14 @@ jobs:
         COMMIT_MESSAGE="Automated data update: DRAM prices (${{ github.run_number }})"
         git commit -m "$COMMIT_MESSAGE"
         git push
+cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write        
+    steps:
+      - uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 7      # keep last week's data 
+          keep_minimum_runs: 5  # just keep a minimum number of actions
